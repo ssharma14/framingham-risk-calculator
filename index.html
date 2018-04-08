@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Framingham Risk Calculator</title>
+    <link rel="stylesheet" type="text/css" href="themes/jAlert-v2.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="themes/bootstrap-fullcalendar.css" />
+    <link href="themes/jquery-ui-1.10.4.custom.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="themes/style.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+	<div class="container">
+        <form method="post" action="" id="framingham" runat="server">
+
+        <div>
+            <div style="text-align: center;">
+                <h2 class="pt-2 pb-3 font-weight-bold">Framingham Risk Calulator</h2>
+            </div>
+            <div>
+                <h3>Your Details</h3>
+                <p class="pb-2">This calculator is for use only in <b>primary prevention</b> for those age of 30 or above, and
+                    should not be used for individuals with known heart disease. For
+                    DIABETICS use the UKPDS calculator
+                </p>
+                 <div class="row">   
+                    <div class="col-12 mb-5">
+                        <div class="row mx-auto">
+                            <div class="col-md-6 form-group row">
+                                <p class="label col-sm-3 pl-0 pl-md-3">Name:</p>
+                                <p class="col-md-9 pl-0 pl-md-3"> <input type="text" id="cName" runat="server" Enabled="true" class="bdr" style="padding:5px"></p>
+                            </div>
+                            <div class="col-md-6 form-group row">    
+                                <p class="label col-sm-3 pl-0 pl-md-3">Date:</p>
+                                <p class="col-sm-9 pl-0 pl-md-3"> <input type="text" id="cDate" runat="server" class="bdr" style="padding:5px" disabled="true"></p>
+                            </div>
+                            
+                            
+                            <div class="col-md-6 form-group row">
+                                <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Age:</p>
+                                <p class="col-sm-9 pl-0 pl-md-3"><input type="text" id="cAge" class="bdr" size="5" name="cAge" Enabled="true" style="padding:5px" onblur="ageValidation()">
+                                    <label for="error" id= "age_error"></label>
+                                </p>
+                            </div>
+                            <div class="col-md-6 form-group row">    
+                                <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Gender:</p>
+                                    <p class="col-sm-9 pl-0 pl-md-3">
+                                    <input id="cMale" name="1" checked="checked" type="radio" style="padding-right:5px;"/>Male</br>
+                                    <input id="cfemale" name="2" checked="checked" type="radio" style="padding-right:5px;"/>Female
+                                </p>
+                            </div>
+
+                            <div class="col-md-6 form-group row">   
+                                <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Systolic BP:</p>
+                                <p class="col-sm-9 pl-0 pl-md-3"><input id="cSystolic" class="bdr" size="5" name="cSystolic" type="text" runat="server" onblur="bpValidation()"/> mmHg
+                                <label for="error" id= "bp_error"></label>
+                                </p>
+                            </div>
+                            <div class="col-md-6 form-group row">   
+                                <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;BP Treated?</p>
+                                <p class="col-sm-9 pl-0 pl-md-3"> 
+                                    <input id="cUntreated" name="bptreated" checked="checked" type="radio" />
+                                    <label class="radio" for="cUntreated">Untreated BP</label><br />
+                                    <input id="cTreated" name="bptreated" type="radio" /> 
+                                    <label class="radio" for="cTreated">Treated BP</label> 
+                                </p>
+                                </div>
+
+                            <div class="col-md-6 form-group row">   
+                                <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Total Cholesterol:</p>
+                                <p class="col-sm-9 pl-0 pl-md-3">
+                                    <input type="text" id="cCholesterol" name="cCholesterol" class="bdr" onblur="tlchlValidation()"/> mmol/L
+                                    <label for="error" id= "chl_error"></label>
+                                </p>
+                            </div>
+                            <div class="col-md-6 form-group row">
+                                <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Smoker?</p>
+                                <p class="col-sm-9 pl-0 pl-md-3">  
+                                    <input id="cNonSmoker" name="smoking" checked="checked" type="radio" /> 
+                                    <label class="cNonSmoker" for="cNonSmoker">Non- or Ex-smoker</label><br />
+                                    <input id="cCurSmoker" name="smoking" type="radio" /> 
+                                    <label class="cCurSmoker" for="cCurSmoker">Current Smoker</label>
+                                </p>
+                            </div>
+
+                            <div class="col-md-6 form-group row">
+                                <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;HDL:</p>
+                                <p class="col-sm-9 pl-0 pl-md-3">
+                                    <input id="cHDL" class="bdr" size="5" name="cHDL" type="text" oscarDB="m$HDL#value" onblur="hdlValidation()" /> mmol/L
+                                    <label for="error" id= "hdl_error"></label>
+                                </p>
+                            </div>
+                            <div class="col-md-6 form-group row">
+                                <p class="label col-sm-5 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Is patient diabetic?</p>
+                                <p class="col-md-7 pl-0 pl-md-3">
+                                    <input id="isDiabetesY" name="isDiabetes" checked="checked" type="radio" />
+                                    <label class="isDiabetesY" for="isDiabetesY">Yes</label><br />
+                                    <input id="isDiabetesN" name="isDiabetes" type="radio" /> 
+                                    <label class="isDiabetesN" for="isDiabetesN">No</label>
+                                </p>
+                            </div>
+                            <p class="mt-0">
+                                <input class="btn calculate font-weight-bold px-4 py-2 mt-0 btn-shadow btn-info" id = "cal" value="Calculate" onclick="testCalculation()" type="button" data-toggle="modal" data-target="#exampleModal"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>           
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title nobar" id="exampleModalLabel">Your Results</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="onModalClose()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="pb-3">Framingham Ten-Year Coronary Heart Disease Risk</h5>
+                    <div class="pb-3">
+                        <label for="total_points" id="total_points">Total points</label>
+                    </div> 
+                    <div class="pb-3">
+                        <label for="result" id="result_value">Risk %</label>
+                    </div>        
+                    
+                    <div class="pb-3">     
+                        <label for="result" id="heart_age">Heart age in years</label>
+                    </div>
+                        <div id="low-risk"></div>
+                        <div id="moderate-risk"></div>
+                        <div id="high-risk"></div>   
+                        <label for="risk_level" id="risk_level">Risk Level</label>
+                    </div> 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="onModalClose()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!--external css-->
+    <script type="text/javascript" src="Scripts/jAlert-v2.js"></script> 
+  	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="FraminghamCalculator.js"></script>
+</body>
+</html>

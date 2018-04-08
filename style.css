@@ -1,0 +1,156 @@
+.noborder {
+    scrollbar-3dlight-color: transparent;
+    scrollbar-3dlight-color: transparent;
+    scrollbar-arrow-color: transparent;
+    scrollbar-base-color: transparent;
+    scrollbar-darkshadow-color: transparent;
+    scrollbar-face-color: transparent;
+    scrollbar-highlight-color: transparent;
+    scrollbar-shadow-color: transparent;
+    scrollbar-track-color: transparent;
+    background: transparent;
+    overflow: hidden;
+    border : 0px;
+}
+
+*
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-family: /*"gill sans", helvetica,*/ arial, sans-serif;
+	text-align: left;
+	font-size: 16px;
+}
+input[type="text"]{
+    width:100%;
+}
+
+h1, h2, h3
+{
+    margin: 17px 0px;
+}
+
+h3
+{
+	padding-top: 17px;
+	border-bottom: 1px dotted #127785;
+}
+
+h3.nobar
+{
+	border: 0;
+	padding-bottom: 0;
+}
+
+input.bdr
+{
+	border: 1px solid #5c4d46;
+	padding: 7px 3px;
+}
+
+#cal
+{
+	background-color: #58c9f3;
+	padding: 3px 5px;
+	color:#fff;
+}
+
+#submit
+{
+    background-color:#78CD51;
+    padding: 3px 5px;
+	color:#fff;
+	margin-right:10px;
+}
+
+#print
+{
+    background-color:#41cac0;
+    padding: 3px 13px;
+	color:#fff;
+}
+
+.offred{
+    color: #FF0000;
+}
+
+.normaltext {
+	font-family: Arial;
+	font-size: 16px;
+}
+
+.smallertext {
+	font-family: Arial;
+	font-size: 16px;
+}
+.lettertext {
+	font-family: Arial;
+	font-size: 16px;
+
+}
+.noscreenborder {
+	scrollbar-3dlight-color: transparent;
+	scrollbar-3dlight-color: transparent;
+	scrollbar-arrow-color: transparent;
+	scrollbar-base-color: transparent;
+	scrollbar-darkshadow-color: transparent;
+	scrollbar-face-color: transparent;
+	scrollbar-highlight-color: transparent;
+	scrollbar-shadow-color: transparent;
+	scrollbar-track-color: transparent;
+	background: transparent;
+	overflow: hidden;
+	border : 0px;
+}
+
+
+.label
+{
+    color:#333;
+    font-size:16px;
+    display:inline-block;
+    text-align:left;
+}
+
+label
+{
+    margin-bottom:0;
+}
+.radio
+{
+    display:inline;
+    margin:0;
+    padding:1px;
+    line-height:normal;
+}
+#bp_error, #chl_error, #hdl_error, #age_error
+{
+    color:Red;
+    display:block;
+}
+
+#low-risk
+{
+    width:25px;
+    height:25px;
+    background-color:#009590;
+    margin-right:10px;
+    display:none;
+}
+#moderate-risk
+{
+    width:25px;
+    height:25px;
+    background-color:#fff200;
+    margin-right:10px;
+    display:none;
+}
+#high-risk
+{
+    width:25px;
+    height:25px;
+    background-color:#bf1e2e;
+    margin-right:10px;
+    display:none;
+}
