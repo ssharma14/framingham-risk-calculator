@@ -40,7 +40,7 @@
                             <div class="col-md-6 form-group row">
                                 <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Age:</p>
                                 <p class="col-sm-9 pl-0 pl-md-3"><input type="text" id="cAge" class="bdr" size="5" name="cAge" Enabled="true" style="padding:5px" onblur="ageValidation()">
-                                    <label for="error" id= "age_error"></label>
+                                    <label for="error" id= "age_error">*This field is required</label>
                                 </p>
                             </div>
                             <div class="col-md-6 form-group row">    
@@ -55,7 +55,7 @@
                             <div class="col-md-6 form-group row">   
                                 <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Systolic BP:</p>
                                 <p class="col-sm-9 pl-0 pl-md-3"><input id="cSystolic" class="bdr" size="5" name="cSystolic" type="text" runat="server" onblur="bpValidation()"/> mmHg
-                                <label for="error" id= "bp_error"></label>
+                                <label for="error" id= "bp_error">*This field is required</label>
                                 </p>
                             </div>
                             <div class="col-md-6 form-group row">   
@@ -72,7 +72,7 @@
                                 <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;Total Cholesterol:</p>
                                 <p class="col-sm-9 pl-0 pl-md-3">
                                     <input type="text" id="cCholesterol" name="cCholesterol" class="bdr" onblur="tlchlValidation()"/> mmol/L
-                                    <label for="error" id= "chl_error"></label>
+                                    <label for="error" id= "chl_error">*This field is required</label>
                                 </p>
                             </div>
                             <div class="col-md-6 form-group row">
@@ -89,7 +89,7 @@
                                 <p class="label col-sm-3 pl-0 pl-md-3"><span class="offred">*</span>&nbsp;HDL:</p>
                                 <p class="col-sm-9 pl-0 pl-md-3">
                                     <input id="cHDL" class="bdr" size="5" name="cHDL" type="text" oscarDB="m$HDL#value" onblur="hdlValidation()" /> mmol/L
-                                    <label for="error" id= "hdl_error"></label>
+                                    <label for="error" id= "hdl_error">*This field is required</label>
                                 </p>
                             </div>
                             <div class="col-md-6 form-group row">
@@ -102,7 +102,7 @@
                                 </p>
                             </div>
                             <p class="mt-0">
-                                <input class="btn calculate font-weight-bold px-4 py-2 mt-0 btn-shadow btn-info" id = "cal" value="Calculate" onclick="testCalculation()" type="button" data-toggle="modal" data-target="#exampleModal"/>
+                                <input class="btn calculate font-weight-bold px-4 py-2 mt-0 btn-shadow btn-info" id = "cal" value="Calculate" onclick="testCalculations()" type="button" data-toggle="modal" data-target="#exampleModal"/>
                             </p>
                         </div>
                     </div>

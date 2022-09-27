@@ -1,58 +1,49 @@
 "use strict";
-//Ste New date for date input field
-var date = new Date();
-var year = date.getFullYear();
-var month = date.getMonth() + 1;
-var day = date.getDate();
+const date = new Date();
+const year = date.getFullYear();
+let month = date.getMonth() + 1;
+let day = date.getDate();
 if (month < 10)
     month = '0' + month;
 if (day < 10)
     day = '0' + day;
-var today = "".concat(year, "/").concat(month, "/").concat(day);
+const today = `${year}/${month}/${day}`;
 document.getElementById("cDate").value = today;
-var age_now;
-var gender;
-var treated_bp;
-var systolic;
-var total_chol;
-var hdl;
-var smoking;
-var isdiabetic;
-var score = 0; //total points
-var risk = 0;
-var heartAge = 0;
-var riskLevel = '';
-function testCalculations() {
-    age_now = parseFloat(document.getElementById("cAge").value);
-    gender = (document.getElementById("cMale").checked) ? true : false;
-    treated_bp = (document.getElementById("cTreated").checked) ? true : false;
-    systolic = parseFloat(document.getElementById("cSystolic").value);
-    total_chol = parseFloat(document.getElementById("cCholesterol").value);
-    hdl = parseFloat(document.getElementById("cHDL").value);
-    smoking = (document.getElementById("cCurSmoker").checked) ? true : false;
-    isdiabetic = (document.getElementById("isDiabetesY").checked) ? true : false;
-    score = 0; //total points
-    risk = 0;
-    heartAge = 0;
-    riskLevel = '';
-    calculateRisk(); //for calculating total points
-    getCvdRisk(); //for calculating risk percentage
-    getRiskLevel(risk); //for calculating level of risk ie, low,moderate,high
-    riskLevel = getRiskLevel(risk);
-    getHeartAge(); //for calculating heart age
-    validation();
+class testCalculation {
+    constructor() {
+        this.age_now = parseFloat(document.getElementById("cAge").value);
+        this.gender = (document.getElementById("cMale").checked) ? true : false;
+        this.treated_bp = (document.getElementById("cTreated").checked) ? true : false;
+        this.systolic = parseFloat(document.getElementById("cSystolic").value);
+        this.total_chol = parseFloat(document.getElementById("cCholesterol").value);
+        this.hdl = parseFloat(document.getElementById("cHDL").value);
+        this.smoking = (document.getElementById("cCurSmoker").checked) ? true : false;
+        this.isdiabetic = (document.getElementById("isDiabetesY").checked) ? true : false;
+        this.score = 0;
+        this.risk = 0;
+        this.heartAge = 0;
+        this.riskLevel = '';
+    }
 }
-function calculateRisk() {
-    score = getAgeScore();
-    score += getTtlCholesterolScore();
-    score += getTtlHdlScore();
-    score += getBloodPressureScore();
-    score += isSmoking();
-    score += isPatientDiabetic();
+function testCalculations() {
+    const values = new testCalculation();
+    calculateRisk(values.age_now, values.score, values.gender, values.total_chol, values.hdl, values.systolic, values.isdiabetic, values.smoking, values.treated_bp);
+    getCvdRisk(values.score, values.gender, values.risk);
+    getRiskLevel(values.risk, values.score, values.riskLevel);
+    getHeartAge(values.score, values.gender, values.heartAge);
+    validation(values.score, values.riskLevel, values.risk, values.heartAge);
+}
+function calculateRisk(age_now, score, gender, total_chol, hdl, systolic, smoking, isdiabetic, treated_bp) {
+    score = getAgeScore(age_now, gender);
+    score += getTtlCholesterolScore(total_chol, gender);
+    score += getTtlHdlScore(hdl);
+    score += getBloodPressureScore(systolic, gender, treated_bp);
+    score += isSmoking(smoking, gender);
+    score += isPatientDiabetic(isdiabetic, gender);
     console.log(score);
 }
-function getAgeScore() {
-    var ageScore = 0;
+function getAgeScore(age_now, gender) {
+    let ageScore = 0;
     if (age_now >= 30 && age_now <= 34) {
         ageScore = 0;
     }
@@ -85,8 +76,8 @@ function getAgeScore() {
     }
     return ageScore;
 }
-function getTtlCholesterolScore() {
-    var cholScore = 0;
+function getTtlCholesterolScore(total_chol, gender) {
+    let cholScore = 0;
     if (total_chol < 4.1) {
         cholScore = 0;
     }
@@ -104,8 +95,8 @@ function getTtlCholesterolScore() {
     }
     return cholScore;
 }
-function getTtlHdlScore() {
-    var hd1Score = 0;
+function getTtlHdlScore(hdl) {
+    let hd1Score = 0;
     if (hdl < 0.9) {
         hd1Score = 2;
     }
@@ -123,8 +114,8 @@ function getTtlHdlScore() {
     }
     return hd1Score;
 }
-function getBloodPressureScore() {
-    var bpScore = 0;
+function getBloodPressureScore(systolic, gender, treated_bp) {
+    let bpScore = 0;
     if (systolic < 120) {
         if (gender == true) {
             bpScore = (treated_bp) ? 0 : -2;
@@ -165,8 +156,8 @@ function getBloodPressureScore() {
     }
     return bpScore;
 }
-function isSmoking() {
-    var smokingScore = 0;
+function isSmoking(smoking, gender) {
+    let smokingScore = 0;
     if (smoking == true) {
         if (gender == true) {
             smokingScore = 4;
@@ -180,8 +171,8 @@ function isSmoking() {
     }
     return smokingScore;
 }
-function isPatientDiabetic() {
-    var diabetesScore = 0;
+function isPatientDiabetic(isdiabetic, gender) {
+    let diabetesScore = 0;
     if (isdiabetic == true) {
         if (gender == true) {
             diabetesScore = 3;
@@ -195,11 +186,10 @@ function isPatientDiabetic() {
     }
     return diabetesScore;
 }
-function getCvdRisk() {
-    var i = 0; //for getting index of risk and heart table
+function getCvdRisk(score, gender, risk) {
+    var i = 0;
     var j = (gender == true) ? 0 : 1;
-    var cvdRiskTable = [['LT1', 'LT1'], [1.1, 'LT1'], [1.4, 1.0], [1.6, 1.2], [1.9, 1.5], [2.3, 1.7], [2.8, 2.0], [3.3, 2.3], [3.9, 2.8], [4.7, 3.3], [5.6, 3.9], [6.7, 4.5], [7.9, 5.3], [9.4, 6.3], [11.2, 7.3], [13.3, 8.6], [15.6, 10.0], [18.4, 11.7], [21.6, 13.7], [25.3, 15.9], [29.4, 18.51], ['GT30', 21.5], ['GT30', 24.8], ['GT30', 27.5], ['GT30', 'GT30']]; // male, female - starts at -3
-    // translate score to index. Basically we are getting values from cvdRiskTable
+    const cvdRiskTable = [['LT1', 'LT1'], [1.1, 'LT1'], [1.4, 1.0], [1.6, 1.2], [1.9, 1.5], [2.3, 1.7], [2.8, 2.0], [3.3, 2.3], [3.9, 2.8], [4.7, 3.3], [5.6, 3.9], [6.7, 4.5], [7.9, 5.3], [9.4, 6.3], [11.2, 7.3], [13.3, 8.6], [15.6, 10.0], [18.4, 11.7], [21.6, 13.7], [25.3, 15.9], [29.4, 18.51], ['GT30', 21.5], ['GT30', 24.8], ['GT30', 27.5], ['GT30', 'GT30']];
     if (score > -3 && score <= 21) {
         i = score + 3;
     }
@@ -207,21 +197,18 @@ function getCvdRisk() {
         i = 24;
     }
     risk = cvdRiskTable[i][j];
-    // if (Number.isNaN(risk)) {
-    //     // risk = risk.replace('LT', '&lt;');
-    //     // risk = risk.replace('GT', '&gt;');
-    // }
+    if (Number.isNaN(risk)) {
+    }
     return risk;
 }
-function getRiskLevel(risk) {
+function getRiskLevel(risk, score, riskLevel) {
     if (isNaN(score)) {
         document.getElementById('low-risk').style.display = 'none';
         document.getElementById('high-risk').style.display = 'none';
         document.getElementById('moderate-risk').style.display = 'none';
     }
     else {
-        if (risk != null) {
-            // risk = risk.substring(4);
+        if (Number.isNaN(risk) && risk != null) {
         }
         if (risk < 10 && risk != null) {
             document.getElementById('low-risk').style.display = 'inline-block';
@@ -244,32 +231,28 @@ function getRiskLevel(risk) {
     }
     return riskLevel;
 }
-function getHeartAge() {
+function getHeartAge(score, gender, heartage) {
     var i = 0;
     var j = (gender == true) ? 0 : 1;
-    var heartAgeTable = [['LT30', 'LT30'], [30, 'LT30'], [32, 31], [34, 34], [36, 36], [38, 39], [40, 42], [42, 45], [45, 48], [48, 51], [51, 55], [54, 59], [57, 64], [60, 68], [64, 73], [68, 79], [72, 'GT80'], [76, 'GT80'], ['GT80', 'GT80']]; // male, female - starts at -1
-    // translate score to index. getting heart age from heartAgeTable
+    const heartAgeTable = [['LT30', 'LT30'], [30, 'LT30'], [32, 31], [34, 34], [36, 36], [38, 39], [40, 42], [42, 45], [45, 48], [48, 51], [51, 55], [54, 59], [57, 64], [60, 68], [64, 73], [68, 79], [72, 'GT80'], [76, 'GT80'], ['GT80', 'GT80']];
     if (score > -1 && score <= 17) {
         i = score + 1;
     }
     else if (score > 17) {
         i = 18;
     }
-    heartAge = heartAgeTable[i][j];
-    // if (Number.isNaN(heartAge)) {
-    //     // heartage = heartage.replace('LT', '&lt;');
-    //     // heartage = heartage.replace('GT', '&gt;');
-    // }
-    return heartAge;
+    heartage = heartAgeTable[i][j];
+    if (Number.isNaN(heartage)) {
+    }
+    return heartage;
 }
 ;
-function validation() {
+function validation(score, riskLevel, risk, heartage) {
     var _a, _b;
-    console.log(score);
-    var systolicBp = document.getElementById("cSystolic").value;
-    var tchol = document.getElementById("cCholesterol").value;
-    var chdl = document.getElementById("cHDL").value;
-    var age = document.getElementById("cAge").value;
+    const systolicBp = document.getElementById("cSystolic").value;
+    const tchol = document.getElementById("cCholesterol").value;
+    const chdl = document.getElementById("cHDL").value;
+    const age = document.getElementById("cAge").value;
     if (systolicBp.length == 0 || tchol.length == 0 || chdl.length == 0 || age.length == 0) {
         alert("please fill on all the information correctly");
         ageValidation();
@@ -282,7 +265,7 @@ function validation() {
         var score1 = Object();
         document.getElementById("total_points").innerHTML = 'Total Score: ' + score + ' points';
         document.getElementById("result_value").innerHTML = 'Risk: ' + risk + '%';
-        document.getElementById("heart_age").innerHTML = 'HeartAge: ' + heartAge + ' years';
+        document.getElementById("heart_age").innerHTML = 'HeartAge: ' + heartage + ' years';
         document.getElementById("risk_level").innerHTML = riskLevel;
         score1.Framingham_Total_points = parseInt(document.getElementById("total_points").innerHTML);
         score1.Framingham_Risk_percentage = document.getElementById("result_value").innerHTML;
@@ -293,14 +276,13 @@ function validation() {
 }
 function ageValidation() {
     var _a, _b, _c, _d, _e, _f, _g, _h;
-    var age = document.getElementById("cAge").value;
-    var ageStyle = document.getElementById("cAge");
-    var age_now = Number(document.getElementById("cAge").value);
-    var error = document.getElementById("age_error");
+    let age = document.getElementById("cAge").value;
+    let ageStyle = document.getElementById("cAge");
+    const age_now = Number(document.getElementById("cAge").value);
+    const error = document.getElementById("age_error");
     if (age.length == 0) {
         error === null || error === void 0 ? void 0 : error.classList.add('visible');
         ageStyle === null || ageStyle === void 0 ? void 0 : ageStyle.classList.add('error');
-        // document.querySelector("#cAge").focus();
     }
     else {
         error === null || error === void 0 ? void 0 : error.classList.remove('visible');
@@ -324,9 +306,9 @@ function ageValidation() {
 }
 ;
 function bpValidation() {
-    var bp = document.getElementById("cSystolic").value;
-    var bpStyle = document.getElementById("cSystolic");
-    var error = document.getElementById("bp_error");
+    let bp = document.getElementById("cSystolic").value;
+    let bpStyle = document.getElementById("cSystolic");
+    const error = document.getElementById("bp_error");
     if (bp.length == 0) {
         error === null || error === void 0 ? void 0 : error.classList.add('visible');
         bpStyle === null || bpStyle === void 0 ? void 0 : bpStyle.classList.add('error');
@@ -337,7 +319,6 @@ function bpValidation() {
             error.innerHTML = "*Enter a value greater than or equal to 10";
         }
         bpStyle === null || bpStyle === void 0 ? void 0 : bpStyle.classList.add('error');
-        //document.querySelector("#cSystolic").focus();
     }
     else {
         error === null || error === void 0 ? void 0 : error.classList.remove('visible');
@@ -346,9 +327,9 @@ function bpValidation() {
 }
 ;
 function tlchlValidation() {
-    var tlchol = document.getElementById("cCholesterol").value;
-    var cholStyle = document.getElementById("cCholesterol");
-    var error = document.getElementById("chl_error");
+    let tlchol = document.getElementById("cCholesterol").value;
+    let cholStyle = document.getElementById("cCholesterol");
+    const error = document.getElementById("chl_error");
     if (tlchol.length == 0) {
         error === null || error === void 0 ? void 0 : error.classList.add('visible');
         cholStyle === null || cholStyle === void 0 ? void 0 : cholStyle.classList.add('error');
@@ -367,9 +348,9 @@ function tlchlValidation() {
 }
 ;
 function hdlValidation() {
-    var chdl = document.getElementById("cHDL").value;
-    var chdlStyle = document.getElementById("cSystolic");
-    var error = document.getElementById("hdl_error");
+    let chdl = document.getElementById("cHDL").value;
+    let chdlStyle = document.getElementById("cSystolic");
+    const error = document.getElementById("hdl_error");
     if (chdl.length == 0) {
         error === null || error === void 0 ? void 0 : error.classList.add('visible');
         chdlStyle === null || chdlStyle === void 0 ? void 0 : chdlStyle.classList.add('error');
@@ -392,3 +373,4 @@ function onModalClose() {
     var resetForm = document.getElementById(formID);
     resetForm.reset();
 }
+//# sourceMappingURL=FraminghamCalculator.js.map
